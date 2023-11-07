@@ -17,15 +17,14 @@ qc_SE(file = fq_files, outdir = "output/", ad1 = adapter_sequence)
 ```
 
 ### FastQ files to sequence by counts matrix
+
 ```{r, eval = FALSE}
 m <- fastq2SeqCountMatrix(files = trimmed_fastq_files)
 ```
 
-### Unique sequences for alignment
+### Write unique sequences for alignment
 ```{r, eval = FALSE}
-fa <- DNAStringSet(row.names(m))
-names(fa) <- paste0("S", 1:length(fa))
-writeXStringSet(fa, fasta_file)
+writeUniqueFasta(m, "unique.fasta")
 ```
 
 
