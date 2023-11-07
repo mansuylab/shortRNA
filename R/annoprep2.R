@@ -34,7 +34,7 @@
 #' @importFrom ensembldb genes exonsBy seqlevelsStyle getGenomeFaFile
 #' @importFrom R.utils gzip
 #' @importFrom rtracklayer import
-#' 
+#'
 prepareAnnotation <- function(ensdb, genome = NULL, output_dir = "",
                               extra.gr = list(), extra.seqs = NULL,
                               resolveSplicing = NULL,
@@ -250,10 +250,10 @@ prepareAnnotation <- function(ensdb, genome = NULL, output_dir = "",
 #'
 #' @return a list of GRanges annotation of miRNAs, miRNAs DNAStringSet,
 #' and miRNA hairpins miRNAs DNAStringSet
-#' 
+#'
 #' @importFrom rtracklayer import
 #' @importFrom plyr ldply
-#' 
+#'
 #' @export
 #'
 #' @examples
@@ -261,7 +261,7 @@ prepareAnnotation <- function(ensdb, genome = NULL, output_dir = "",
 #' mir_human <- getmiRNA(sp = "hsa")
 getmiRNA <- function(sp = "mmu") {
   sp <- tolower(sp)
-  link <- paste0("https://www.mirbase.org/ftp/CURRENT/genomes/", sp, ".gff3")
+  link <- paste0("https://www.mirbase.org/download/CURRENT/genomes/", sp, ".gff3")
   gr <- rtracklayer::import(link)
 
   gr$transcript_id <- gr$Name
@@ -310,7 +310,7 @@ getmiRNA <- function(sp = "mmu") {
 
   gtf <- gtf[, c("tx_id", "symbol", "tx_type")]
 
-  miRNA <- rtracklayer::import("https://www.mirbase.org/ftp/CURRENT/mature.fa.gz",
+  miRNA <- rtracklayer::import("https://www.mirbase.org/download/CURRENT/mature.fa.gz",
     format = "fasta"
   )
   miRNA <- miRNA[grep(pattern = paste0("^", sp), x = names(miRNA))]
@@ -322,7 +322,7 @@ getmiRNA <- function(sp = "mmu") {
     )
   })
 
-  miRNA_h <- rtracklayer::import("https://www.mirbase.org/ftp/CURRENT/hairpin.fa.gz",
+  miRNA_h <- rtracklayer::import("https://www.mirbase.org/download/CURRENT/hairpin.fa.gz",
     format = "fasta"
   )
   miRNA_h <- miRNA_h[grep(pattern = paste0("^", sp), x = names(miRNA_h))]
@@ -338,10 +338,10 @@ getmiRNA <- function(sp = "mmu") {
 #' @param minGap minimum gap between the miRNAs for grouping
 #'
 #' @return A GRanges object
-#' 
+#'
 #' @importFrom GenomicRanges reduce findOverlaps GRanges
 #' @importFrom S4Vectors queryHits subjectHits
-#' 
+#'
 #' @export
 miRNAcluster <- function(gr, minGap = 10000) {
   gr_miRNA <- gr[grep("miRNA", gr$tx_biotype)]
@@ -443,7 +443,7 @@ getMttRNA <- function(sp = "Mus musculus", addCCA = TRUE) {
 #' @param addCCA Whether to add CCA modifications to sequences or not.
 #'
 #' @importFrom Biostrings readDNAStringSet DNAStringSet
-#' 
+#'
 #' @export
 gettRNA <- function(sp = "mm10", mt = TRUE, addCCA = TRUE) {
   match.arg(sp, c("hg19", "hg38", "mm10", "mm39"))
@@ -622,7 +622,7 @@ getrRNA <- function(sp = "Mus musculus", release = "138.1") {
 #' @importFrom AnnotationHub AnnotationHub query
 #' @importFrom R.utils gunzip downloadFile
 #' @importFrom rtracklayer import.chain liftOver
-#' 
+#'
 #' @return A list of databases (DNAstringSet or GRanges)
 #'
 #' @export
