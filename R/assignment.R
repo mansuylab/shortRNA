@@ -10,11 +10,11 @@
 #' that were resolved for each fragment.
 #'
 #' @return A \code{\link[S4Vectors]{DataFrame-class}}
-#' 
+#'
 #' @importFrom S4Vectors DataFrame splitAsList runLength
 #' @importFrom GenomicRanges GRanges
 #' @importFrom IRanges IRanges LogicalList FactorList
-#' 
+#'
 #' @export
 assignReads <- function(sources, rules = defaultAssignRules(),
                         reportResolved = FALSE) {
@@ -64,8 +64,8 @@ assignReads <- function(sources, rules = defaultAssignRules(),
       as.integer(!is.na(sources[-dups, "chr"]))
   }
   sources <- sources[dups, ]
-  # is there are valid overlaps, discard invalid ones
-  hasValid <- unique(sources$seq[sources$valid])
+  # if there are valid overlaps, discard invalid ones
+  hasValid <- unique(sources$seq[which(sources$valid)])
   w <- which(!sources$valid & sources$seq %in% hasValid)
   if (length(w) > 0) {
     ambiguities$hasValid <-
@@ -166,7 +166,12 @@ assignReads <- function(sources, rules = defaultAssignRules(),
   }
   # merge back assignments and get rid of NA values
   sources <- rbind(DataFrame(single.src), sources)
-  for (f in fields) sources[[f]] <- sources[[f]][which(!is.na(sources[[f]]))]
+
+  for (f in fields) {
+    if(is(sources[[f]], "AtomicList")){
+      sources[[f]] <- sources[[f]][IRanges::which(!is.na(sources[[f]]))]
+    }
+  }
 
   # give labels to the different status flags
   stst <- c(
@@ -192,7 +197,7 @@ assignReads <- function(sources, rules = defaultAssignRules(),
     sources$resolvedAmbiguities <- a
   }
 
-  if (!is.null(sources$reclassify) && any(!is.na(sources$reclassify))) {
+  if (!is.null(sources$reclassify) && any(any(!is.na(sources$reclassify)))) {
     sources$reclassify <- FactorList(sources$reclassify)
   } else {
     sources$reclassify <- NULL

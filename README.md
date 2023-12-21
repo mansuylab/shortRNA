@@ -64,7 +64,7 @@ alignShortRNA(
 ```{r, eval = FALSE}
 o <- overlapWithTx2(
   bamFile = align_file, annotation = a,
-  ignoreStrand = TRUE, nbthreads = 16
+  ignoreStrand = TRUE, nbthreads = 16, uniqueFasta="unique.fasta"
 )
 ```
 
